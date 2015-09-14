@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-sm-12">
+    <p class="lead">Tienes asignaturas pendientes. Si lo deseas, puedes asignar
+      una nota a cada una antes de continuar para considerarla en el cálculo de
+      tu prioridad.</p>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Créditos</th>
+          <th>Nota</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="clase in data.inscritas | filter: {evaluacion: 'Pendiente'}">
+          <td>{{clase.nombre}}</td>
+          <td>{{clase.creditos}}</td>
+          <td contenteditable ng-model="clase.nota"></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="text-center">
+      <button class="btn btn-primary"
+              ng-click="pendingReady()">Continuar</button>
+    </p>
+  </div>
+</div>

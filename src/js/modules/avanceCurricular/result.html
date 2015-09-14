@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h2>{{prioridad}}*</h1>
+    <p><small><em>El cálculo de esta prioridad se basó directamente en los datos rescatados
+      desde el módulo de Avance Curricular usando la fórmula de prioridad
+      académica y puede que no sea igual a la prioridad calculada por la
+      universidad.</em></small></p>
+    <p>
+      <button class="btn btn-primary" ng-click="closePopup()">Cerrar</button>
+      <button class="btn btn-info"
+              ng-click="goBack()"
+              ng-show="{{ pending }}">Editar Notas</button>
+    </p>
+  </div>
+</div>

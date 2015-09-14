@@ -1,0 +1,14 @@
+# Archivos de Sistema
+.DS_Store
+
+# Archivos de Distribución
+dist/*
+
+# Archivos Compilados
+src/icon.png
+
+# Módulos de Node
+node_modules
+
+# Archivo de Llaves
+xsiga-key.pem
