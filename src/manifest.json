@@ -10,5 +10,6 @@
     "js": ["js/content.js"]
   }],
   "permissions": ["https://siga.usm.cl/pag"],
-  "web_accessible_resources": [ "js/*", "html/*", "css/*", "images/*" ]
+  "web_accessible_resources": [ "js/*", "html/*", "css/*", "images/*" ],
+  "update_url": "http://raw.github.com/ssl-csrg/xsiga/updates.xml"
 }
