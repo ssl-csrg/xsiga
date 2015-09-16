@@ -103,7 +103,7 @@ gulp.task('watch', ['browserify'], function(){
 gulp.task('default', ['browserify']);
 
 gulp.task('build:webstore', ['copy:prod'], function(){
-  return gulp.src('dist/unpacked-prod')
+  return gulp.src('dist/unpacked-prod/**')
     .pipe(zip(mnf.name+'-'+mnf.version+'.zip'))
     .pipe(gulp.dest('dist'));
 });
