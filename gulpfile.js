@@ -1,5 +1,3 @@
-"use strict"
-
 var gulp = require('gulp');
 var del = require('del');
 var changed = require('gulp-changed');
@@ -9,8 +7,8 @@ var source = require('vinyl-source-stream');
 var uglify = require('gulp-uglify');
 var streamify = require('gulp-streamify');
 var svg2png = require('gulp-svg2png');
+var zip = require('gulp-zip');
 var fs = require('fs');
-var exec = require('child_process').exec;
 
 var mnf = require('./src/manifest.json');
 var pkg = require('./package.json');
@@ -31,11 +29,7 @@ gulp.task('lint:test', function(){
 });
 
 gulp.task('clean', function(){
-  return del([
-    'dist/unpacked-dev',
-    'dist/unpacked-prod',
-    'dist/*.crx'
-  ]);
+  return del('dist/**/*');
 });
 
 gulp.task('manifest', ['copy:modules'],function(){
@@ -45,7 +39,7 @@ gulp.task('manifest', ['copy:modules'],function(){
   fs.mkdirSync('tmp');
   fs.writeFileSync('tmp/manifest.json', JSON.stringify(mnf, null, 2));
   gulp.src('tmp/manifest.json')
-    .pipe(gulp.dest('dist/unpacked-dev'));
+    .pipe(gulp.dest('dist/unpacked'));
   return del(['tmp']);
 });
 
@@ -53,12 +47,12 @@ gulp.task('icon', function(){
   return gulp.src('res/icon.svg')
     .pipe(changed('src', {extension: '.png'}))
     .pipe(svg2png(0.5))
-    .pipe(gulp.dest('src'))
-})
+    .pipe(gulp.dest('src'));
+});
 
 gulp.task('copy:dev', ['clean', 'icon'], function(){
   return gulp.src(['src/**', '!src/js/**', '!src/**/*.md', '!manifest.json'])
-    .pipe(gulp.dest('dist/unpacked-dev'));
+    .pipe(gulp.dest('dist/unpacked'));
 });
 
 gulp.task('copy:modules', ['copy:dev'], function(){
@@ -66,50 +60,50 @@ gulp.task('copy:modules', ['copy:dev'], function(){
     'src/js/modules/**',
     '!src/js/modules/**/background.js',
     '!src/js/modules/**/index.js'
-  ]).pipe(gulp.dest('dist/unpacked-dev/modules/'));
-})
+  ]).pipe(gulp.dest('dist/unpacked/modules/'));
+});
 
 gulp.task('browserify:content', ['lint:src', 'manifest'], function(){
   return browserify(['src/js/content.js'])
     .bundle()
     .pipe(source('content.js'))
-    .pipe(gulp.dest('dist/unpacked-dev/js'))
-    .pipe(streamify(uglify()))
-    .pipe(gulp.dest('dist/unpacked-prod/js'));
+    .pipe(gulp.dest('dist/unpacked/js'));
 });
 
 gulp.task('browserify:background', ['lint:src', 'manifest'], function(){
   return browserify(['src/js/background.js'])
     .bundle()
     .pipe(source('background.js'))
-    .pipe(gulp.dest('dist/unpacked-dev/js'))
-    .pipe(streamify(uglify()))
-    .pipe(gulp.dest('dist/unpacked-prod/js'));
+    .pipe(gulp.dest('dist/unpacked/js'));
 });
 
 gulp.task('browserify', ['browserify:content', 'browserify:background']);
 
-gulp.task('copy:prod', ['browserify'], function(){
-  return gulp.src(['dist/unpacked-dev/**', '!dist/unpacked-dev/js/*.js'])
+gulp.task('uglify:main', ['browserify'], function(){
+  return gulp.src('dist/unpacked/js/**')
+    .pipe(uglify())
+    .pipe(gulp.dest('dist/unpacked-prod/js'));
+});
+
+gulp.task('uglify:modules', ['copy:modules'], function(){
+  return gulp.src('dist/unpacked/modules/**/*.js')
+    .pipe(uglify())
+    .pipe(gulp.dest('dist/unpacked-prod/modules'));
+})
+
+gulp.task('copy:prod', ['uglify:main', 'uglify:modules'], function(){
+  return gulp.src(['dist/unpacked/**', '!dist/unpacked/js/*.js'])
     .pipe(gulp.dest('dist/unpacked-prod'));
 });
 
 gulp.task('watch', ['browserify'], function(){
-  gulp.watch('src/js/**/*.js', ['browserify']);
-  gulp.watch('src/html/**/*', ['copy:prod']);
-})
+  gulp.watch('src/**/*', ['browserify']);
+});
 
-gulp.task('default', ['copy:prod']);
+gulp.task('default', ['browserify']);
 
-gulp.task('build:chrome', ['copy:prod'], function(next){
-  var commands = [
-    './crxmake.sh ./dist/unpacked-prod ./xsiga-key.pem',
-    'mv -v ./unpacked-prod.crx ./dist/' + pkg.name + '-' + pkg.version + '.crx'
-  ]
-  exec(commands.join(' && '),
-  function(err, stdout, stderr){
-    console.log(stdout);
-    console.error(stderr);
-    if(next) next(err);
-  });
+gulp.task('build:webstore', ['copy:prod'], function(){
+  return gulp.src('dist/unpacked-prod')
+    .pipe(zip(mnf.name+'-'+mnf.version+'.zip'))
+    .pipe(gulp.dest('dist'));
 });

@@ -27,15 +27,13 @@ Se necesita un entorno NodeJS v0.12.7 o superior. Al clonar el repositorio, vaya
     npm install
     gulp
 
-Esto creará la carpeta `dist/unpacked-dev`, que puede ser utilizada en el modo de desarrollador de Google Chrome para poder probar la extensión.
+Esto creará la carpeta `dist/unpacked`, que puede ser utilizada en el modo de desarrollador de Google Chrome para poder utilizar la extensión sin empaquetar.
 
-Para construir la extensión para su distribución, si cuenta con la llave de distribución, se puede ejecutar el comando
+Para construir la extensión para su distribución, si cuenta con los privilegios, se puede ejecutar el comando
 
-    gulp build:chrome
+    gulp build:webstore
 
-Lo que creará el archivo `.crx` distribuíble dentro de la carpeta `dist`.
-
-> El archivo que permite la construcción del distribuible de la extensión se encuentra en este momento en poder de [Pablo Albornoz](https://www.github.com/fixmycode). Si usted desea construir su propio distribuíble, ejecute el comando `openssl genrsa 2048 | openssl pkcs8 -topk8 -nocrypt > xsiga-key.pem` para generar una llave.
+Lo que creará el archivo `.zip` distribuíble dentro de la carpeta `dist`.
 
 ## Colaboración
 

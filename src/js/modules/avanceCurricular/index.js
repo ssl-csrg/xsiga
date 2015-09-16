@@ -14,6 +14,7 @@ var getFrameData = function(callback){
           var bNodes = elem.querySelectorAll('b');
           var creditos = Number(bNodes[0].textContent);
           var count = Number(bNodes[1].textContent);
+          if(count === 0) return null;
           return {
             'creditos': creditos,
             'asignaturas': Array.prototype.filter.call(arr, function(elem, jdx){
@@ -70,7 +71,6 @@ var init = function(){
   getFrameData(function(data){
     createButton(data, function(){
       utils.log('Listo');
-      console.log(data);
     });
   });
 };

@@ -1,6 +1,6 @@
 {
   "name": "xsiga",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Extensión para mejorar el Sistema de Gestion Académica de la UTFSM.",
   "author": "Pablo Albornoz <pablo.albornoz@alumnos.usm.cl",
   "contributors": [
@@ -26,6 +26,7 @@
     "gulp-streamify": "^1.0.2",
     "gulp-svg2png": "^0.3.0",
     "gulp-uglify": "^1.4.1",
+    "gulp-zip": "^3.0.2",
     "jshint": "^2.8.0",
     "mocha": "^2.3.2",
     "vinyl-source-stream": "^1.1.0"

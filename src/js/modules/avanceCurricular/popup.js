@@ -1,12 +1,12 @@
 angular.module('PopupApp', ['ui.router'])
-.config(function($stateProvider, $urlRouterProvider){
+.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider){
   $stateProvider
     .state('loading', {
       url: '/',
       template: '<div class="row"><div class="col-sm-12">' +
                 '<p class="text-center">Cargando Datos</p>' +
                 '</div></div>',
-      controller: function($scope, $state){
+      controller: ['$scope', '$state', function($scope, $state){
         var handleData = function(data){
           //obtener asignaturas pendientes
           data.inscritas = data.semestresActivos.reduce(function(prev, curr){
@@ -22,11 +22,10 @@ angular.module('PopupApp', ['ui.router'])
           }
         };
 
-        console.log('Solicitando información');
         chrome.runtime.sendMessage({
           from: 'popup', subject: 'ready'
         }, handleData);
-      }
+      }]
     })
     .state('pending', {
       url: '/pending',
@@ -34,13 +33,12 @@ angular.module('PopupApp', ['ui.router'])
       params: {
         data: null
       },
-      controller: function($scope, $state, $stateParams){
+      controller: ['$scope', '$state', '$stateParams', function($scope, $state, $stateParams){
         $scope.data = $stateParams.data;
-        console.log($scope.data);
         $scope.pendingReady = function(){
           $state.go('result', {data: $scope.data, pending: true});
         };
-      }
+      }]
     })
     .state('result', {
       url: '/result',
@@ -49,7 +47,7 @@ angular.module('PopupApp', ['ui.router'])
         data: null,
         pending: false
       },
-      controller: function($scope, $state, $stateParams){
+      controller: ['$scope', '$state', '$stateParams', function($scope, $state, $stateParams){
         var getPriority = function(data){
           var notasPorCreditos = data.inscritas.reduce(function(prev, curr){
             if(curr.nota === null && curr.sigla.indexOf('DEW') > -1){
@@ -76,10 +74,10 @@ angular.module('PopupApp', ['ui.router'])
         $scope.goBack = function(){
           $state.go('pending', {data:$stateParams.data});
         };
-      }
+      }]
     });
   $urlRouterProvider.otherwise('/');
-})
+}])
 .directive("contenteditable", function() {
   return {
     restrict: "A",
