@@ -13,7 +13,7 @@ angular.module('PopupApp', ['ui.router'])
             return prev.concat(curr.asignaturas);
           }, []);
           var pendientes = data.inscritas.filter(function(elem){
-            return elem.evaluacion == 'Pendiente';
+            return elem.evaluacion == 'No ingresada' || elem.evaluacion == 'Pendiente';
           });
           if(pendientes.length > 0){
             $state.go('pending', {data: data});
@@ -35,6 +35,9 @@ angular.module('PopupApp', ['ui.router'])
       },
       controller: ['$scope', '$state', '$stateParams', function($scope, $state, $stateParams){
         $scope.data = $stateParams.data;
+        $scope.filterPending = function(elem){
+          return elem.evaluacion == 'No ingresada' || elem.evaluacion == 'Pendiente';
+        };
         $scope.pendingReady = function(){
           $state.go('result', {data: $scope.data, pending: true});
         };
@@ -56,7 +59,7 @@ angular.module('PopupApp', ['ui.router'])
             return prev + (curr.nota * curr.creditos);
           }, 0);
           var creditosAprobados = data.inscritas.reduce(function(pr, cr){
-            if (cr.evaluacion == 'Aprobada' || (cr.evaluacion == 'Pendiente' && cr.nota >= 55)){
+            if (cr.evaluacion == 'Aprobada' || ((cr.evaluacion == 'Pendiente' || cr.evaluacion == 'No ingresada') && cr.nota >= 55)){
               return pr + cr.creditos;
             }
             return pr;

@@ -59,7 +59,3 @@ Desafíos técnicos:
  * Carga automática de módulos (subpackaging?).
  * Sandboxing de los scripts de segundo plano.
  * Testing e integración continua.
-
-## Créditos
-
- * Chrome Extension Make Script by [Salsita Software](https://github.com/salsita)

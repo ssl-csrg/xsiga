@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="clase in data.inscritas | filter: {evaluacion: 'Pendiente'}">
+        <tr ng-repeat="clase in data.inscritas | filter: filterPending">
           <td>{{clase.nombre}}</td>
           <td>{{clase.creditos}}</td>
           <td contenteditable ng-model="clase.nota"></td>
