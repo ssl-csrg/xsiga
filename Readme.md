@@ -1,24 +1,14 @@
 # XSIGA
 
-Colección de utilidades para mejorar el Sistema de Gestión Académica de la Universidad Técnica Federico Santa María.
+Una capa de información sobre el sistema de gestión académica de la Universidad Técnica Federico Santa María
 
-## Introducción
+## Acerca de
 
 Durante años, la única interfaz a disposición de los alumnos y profesores de la UTFSM para administrar sus ramos ha sido SIGA, un software que sufre de una mala estructuración, lo que lo hace difícil de mantener y mejorar.
 
 SIGA no tiene un API abierto y de hecho, es muy probable que ni siquiera tenga un API cerrado, por lo tanto cualquier información disponible es la que ofrece el mismo sistema, el cual es muy difícil de explorar.
 
 XSIGA (por SIGA Extendido) es un proyecto independiente que tiene por objetivo completar la interfaz de SIGA con herramientas que no hayan sido implementadas y que se pueden crear usando la información existente en la pantalla del usuario.
-
-## Modulos Disponibles
-
-Cada módulo extiende una capacidad actual del sistema y por lo tanto lleva su nombre.
-
-### Avace Curricular
-
-En este módulo, el alumno cuenta con una opción para calcular su **prioridad académica** y simular una prioridad un semestre que tiene calificaciones pendientes.
-
-Para utilizarlo, presiona el botón "Calcular Prioridad" que aparecerá al costado de la opción "Imprimir".
 
 ## Requisitos para el Desarrollo
 

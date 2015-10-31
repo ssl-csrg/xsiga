@@ -6,9 +6,7 @@ dist/*
 
 # Archivos Compilados
 src/icon.png
+tmp
 
 # Módulos de Node
 node_modules
-
-# Archivo de Llaves
-xsiga-key.pem

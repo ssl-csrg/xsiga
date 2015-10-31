@@ -2,13 +2,13 @@
   "manifest_version": 2,
   "icons": { "128": "icon.png" },
   "background": {
-    "scripts": ["js/background.js"],
+    "scripts": ["background.js"],
     "persistent": false
   },
   "content_scripts": [{
     "matches": ["https://siga.usm.cl/*"],
-    "js": ["js/content.js"]
+    "js": ["content.js"]
   }],
-  "permissions": ["https://siga.usm.cl/pag"],
-  "web_accessible_resources": [ "js/*", "html/*", "css/*", "images/*" ]
+  "permissions": ["https://siga.usm.cl/pag", "http://www.example.org/"],
+  "web_accessible_resources": ["bundle.js"]
 }
