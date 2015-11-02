@@ -1,8 +1,11 @@
-import utils from '../lib/utils';
+import utils from '../lib/utils'
+import siga from '../siga'
 
-utils.log("Probando conectar hacia afuera...");
+var activity = siga.detectActivity()
+utils.log(activity.name)
 
-chrome.runtime.sendMessage({url: 'http://www.example.org/'},
-function(responseText) {
-    utils.log("conectado con Example.org");
-});
+if(activity.name === 'Horario Asignaturas'){
+  activity.onListChange((err, list) => {
+    console.log('cambió')
+  })
+}

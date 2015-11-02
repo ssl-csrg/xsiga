@@ -9,6 +9,6 @@
     "matches": ["https://siga.usm.cl/*"],
     "js": ["content.js"]
   }],
-  "permissions": ["https://siga.usm.cl/pag", "http://www.example.org/"],
+  "permissions": ["https://siga.usm.cl/pag"],
   "web_accessible_resources": ["bundle.js"]
 }
