@@ -1,10 +1,10 @@
-import horarioAsignaturas from './insc_procesos'
+import HorarioAsignaturas from './insc_procesos'
 
 export default {
   detectActivity: function() {
     const url = window.location.href;
     if(url.match(/.+insc_procesos\.jsp/)) {
-      return horarioAsignaturas
+      return new HorarioAsignaturas()
     } else if (url.match(/.+sistemas\.jsp/)) {
       return {name: 'Menú Principal'}
     }

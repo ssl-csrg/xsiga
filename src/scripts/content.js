@@ -6,6 +6,6 @@ utils.log(activity.name)
 
 if(activity.name === 'Horario Asignaturas'){
   activity.onListChange((err, list) => {
-    console.log('cambió')
+    console.log(list)
   })
 }
