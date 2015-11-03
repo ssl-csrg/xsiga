@@ -1,51 +1,40 @@
 # XSIGA
 
-Una capa de información sobre el sistema de gestión académica de la Universidad Técnica Federico Santa María
+Un proyecto de información semántica y social sobre el Sistema de Información de Gestión Académica de la Universidad Técnica Federico Santa María
 
 ## Acerca de
 
-Durante años, la única interfaz a disposición de los alumnos y profesores de la UTFSM para administrar sus ramos ha sido SIGA, un software que sufre de una mala estructuración, lo que lo hace difícil de mantener y mejorar.
+SIGA es un software de gestión de información académica para alumnos y profesores de la universidad. Su principal objetivo es controlar la inscripción de asignaturas y mantener el avance curricular de los alumnos. A grandes rasgos, estas son metas que SIGA alcanza con éxito y la intención de este proyecto no es criticar las decisiones de diseño tomadas a lo largo de su desarrollo.
 
-SIGA no tiene un API abierto y de hecho, es muy probable que ni siquiera tenga un API cerrado, por lo tanto cualquier información disponible es la que ofrece el mismo sistema, el cual es muy difícil de explorar.
+XSIGA (por SIGA Extendido) es un proyecto independiente que tiene por objetivo entregarle a los estudiantes información adicional a la que presta el sistema, ingresada y calificada por los mismos estudiantes. Un aporte a la interacción de los usuarios con la plataforma y con el resto del estudiantado. Esta información se inyecta sobre la información existente en el sistema, de modo de ser útil en el contexto.
 
-XSIGA (por SIGA Extendido) es un proyecto independiente que tiene por objetivo completar la interfaz de SIGA con herramientas que no hayan sido implementadas y que se pueden crear usando la información existente en la pantalla del usuario.
+## Obtener el software
+
+La última versión estable de la extensión para Google Chrome o Chromium se encuentra disponible de forma gratuita en [Chrome Webstore](https://chrome.google.com/webstore/detail/xsiga/nnffngnnipoccomecgokkoghkbabhpdc). También puede seguir las instrucciones de la siguiente sección para obtener una versión desempaquetada, lo que le permitirá utilizar las nuevas características antes de que estén disponibles en la tienda.
+
+## Aviso Legal
+
+Este software es un trabajo independiente creado por y para estudiantes. No cuenta con el apoyo o la autorización de ninguna autoridad de la Universidad Técnica Federico Santa María.
+
+Los principios de su desarrollo son los siguientes:
+
+* El software no interferirá ni remplazará ninguna interacción normal del usuario con SIGA.
+* El software no almacenará ningún tipo de información personal o de identificación del usuario.
+
+Todo el código fuente de la aplicación se encuentra disponible para su escrutinio por parte de los estudiantes en pos de que estos principios se cumplan siempre.
 
 ## Requisitos para el Desarrollo
 
-Se necesita un entorno NodeJS v0.12.7 o superior. Al clonar el repositorio, vaya al directorio y ejecute
+La extensión debe correr sobre cualquier versión moderna de Chrome o Chromium, pero se recomienda una versión sobre v44, para aprovechar las mejoras en términos de empaquetamiento.
 
+Para construir la extensión, se necesita un entorno NodeJS v0.12.7 o superior. Al clonar el repositorio, vaya al directorio y ejecute
+
+    npm install -g gulp
     npm install
     gulp
 
-Esto creará la carpeta `dist/unpacked`, que puede ser utilizada en el modo de desarrollador de Google Chrome para poder utilizar la extensión sin empaquetar.
-
-Para construir la extensión para su distribución, si cuenta con los privilegios, se puede ejecutar el comando
-
-    gulp build:webstore
-
-Lo que creará el archivo `.zip` distribuíble dentro de la carpeta `dist`.
+Esto creará la carpeta `dist/unpacked`, que puede ser cargada en el modo de desarrollador de Google Chrome para poder utilizar la extensión sin empaquetar.
 
 ## Colaboración
 
-XSIGA es un proyecto que queda en manos de todos los alumnos de la UTFSM. Para colaborar en este proyecto, se puede *forkear* este repositorio e ingresar sus modificaciones a través de *pull request*, las que serán revisadas y luego añadidas al proyecto final que será distribuído a través de Github y las distintas webstores.
-
-Miembros de SSL pueden editar directamente el proyecto, pero sirvase a mostrar sus avances a través de *branching* antes de unirlos a la rama estable.
-
-El proyecto inicialmente está enfocado en Google Chrome pero es preferible encapsular el código de forma que desarrollar extensiones para Firefox o Safari sea sencillo en el futuro.
-
-En cuanto a estilo de programación, para una mejor comprensión entre programadores, se utilizará la [guía de estilo de Javascript](https://google.github.io/styleguide/javascriptguide.xml) de Google como base.
-
-## Qué Sigue?
-
-Algunas ideas que representan un objetivo interesante para continuar este proyecto son:
-
- * Inscripción de ramos en paralelos no disponibles.
- * Vista imprimible para el horario personal.
- * Calificación pública de profesores (a la RateMyProfessor).
-
-Desafíos técnicos:
-
- * Permitir al usuario controlar la activación de características.
- * Carga automática de módulos (subpackaging?).
- * Sandboxing de los scripts de segundo plano.
- * Testing e integración continua.
+XSIGA es un proyecto que queda en manos de todos los alumnos de la UTFSM. Para colaborar en el desarrollo del software, se puede *forkear* este repositorio e ingresar sus modificaciones a través de *pull request*, las que serán revisadas siguiendo los parámetros establecidos en el [documento de colaboración](CONTRIBUTING.md) y luego añadidas al proyecto final que será distribuído a través de Chrome Webstore.

@@ -55,6 +55,8 @@ gulp.task('make:unpacked', ['copy:dev'], () => {
   return del(['tmp'])
 })
 
+gulp.task('default', ['make:unpacked'])
+
 gulp.task('minify', ['make:unpacked'], () => {
   return gulp.src(['dist/unpacked/**/*.js'])
     .pipe(uglify())
