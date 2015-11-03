@@ -1,0 +1,5 @@
+a.xs-link {
+  text-decoration: none;
+  border-bottom: 1px dotted blue;
+  cursor: help;
+}

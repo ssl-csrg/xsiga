@@ -7,3 +7,6 @@ var processMessage = function(req, sender, callback){
 }
 
 chrome.runtime.onMessage.addListener(processMessage)
+chrome.tabs.insertCSS(null, {file: 'xs-style.css'}, () => {
+  utils.log('estilo cargado')
+})

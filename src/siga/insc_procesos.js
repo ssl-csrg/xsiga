@@ -1,4 +1,4 @@
-import utils from './utils'
+import * as utils from './utils'
 
 export default class HorarioAsignaturas {
   constructor(){
@@ -39,8 +39,11 @@ export default class HorarioAsignaturas {
           obj.dept = dataNodes[map.dept].innerText.trim()
         obj.room = dataNodes[map.room].innerText.trim()
         if(map.hasOwnProperty('teacher')){
-          obj.teacher = dataNodes[map.teacher].innerText.trim()
-          obj.teacherNode = dataNodes[map.teacher]
+          let teacherText = dataNodes[map.teacher].innerText.trim()
+            if(!teacherText.toLowerCase().match(/^(proceso interno|nn|sin información)$/)){
+              obj.teacher = teacherText
+              obj.teacherNode = dataNodes[map.teacher]
+            }
         }
         if(inherited === false){
           if(map.hasOwnProperty('name'))
@@ -54,7 +57,10 @@ export default class HorarioAsignaturas {
           obj.dept = courseCodes[obj.code].dept
           obj.short = courseCodes[obj.code].short
         }
-      } catch(ex) { console.error(ex) }
+      } catch(ex) {
+        console.error(ex)
+        console.log({obj: obj, inherited: inherited})
+       }
       return obj
     }
 
@@ -105,12 +111,12 @@ export default class HorarioAsignaturas {
     }
 
     function grabCourseList() {
-      utils.getFrameWithDelay('frame3', 1500, (frame) => {
-        callback(null, self.parseList(frame, self.selectedType))
+      utils.getFrameWithDelay('frame3', 2000, (frame) => {
+        callback(self.parseList(frame, self.selectedType))
       })
     }
 
-    utils.onFrameReady('frame5', (frame) => {
+    utils.getFrameWithDelay('frame5', 200, (frame) => {
       setupMain(frame)
     })
   }
