@@ -1,5 +1,12 @@
 a.xs-link {
+  color: black;
   text-decoration: none;
-  border-bottom: 1px dotted blue;
+  border-bottom: 1px dotted gray;
   cursor: help;
+}
+
+a.xs-link:hover {
+  color: #2676FF;
+  text-decoration: underline;
+  border-bottom: none;
 }

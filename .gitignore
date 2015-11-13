@@ -3,6 +3,7 @@
 
 # Archivos de Distribución
 dist/*
+ignored
 
 # Archivos Compilados
 src/icon.png
