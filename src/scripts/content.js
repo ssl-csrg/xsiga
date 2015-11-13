@@ -6,15 +6,39 @@ utils.log(activity.name)
 
 if(activity.name === 'Horario Asignaturas'){
   activity.onListChange((list) => {
-    list.filter((elem) => elem.hasOwnProperty('nameNode'))
+    list.filter((elem) => elem.hasOwnProperty('courseNode'))
       .map((elem, idx, array) => {
-        let node = elem.nameNode
-        node.innerHTML = `<a class="xs-link">${elem.name}</a>`
+        makeNode(elem, 'course')
       })
     list.filter((elem) => elem.hasOwnProperty('teacherNode'))
       .map((elem, idx, array) => {
-        let node = elem.teacherNode
-        node.innerHTML = `<a class="xs-link">${elem.teacher}</a>`
+        makeNode(elem, 'teacher')
       })
   })
+}
+
+function makeNode(obj, kind){
+  let anchor = document.createElement('a')
+  anchor.dataset.kind = kind
+  anchor.classList.add('xs-link')
+  anchor.appendChild(document.createTextNode(obj[kind]))
+
+  let node = obj[`${kind}Node`]
+  node.innerHTML = ''
+  node.appendChild(anchor)
+
+  anchor.addEventListener('click', (evt) => {
+    requestInfo(kind, obj)
+    evt.preventDefault()
+  })
+}
+
+function requestInfo(kind, elem){
+  chrome.runtime.sendMessage({
+    type: 'info',
+    kind: kind,
+    data: elem
+  }, (response) => {
+    console.log(response);
+  });
 }

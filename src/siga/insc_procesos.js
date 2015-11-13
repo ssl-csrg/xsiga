@@ -4,120 +4,172 @@ export default class HorarioAsignaturas {
   constructor(){
     this.name = 'Horario Asignaturas'
     this.listTypes = [null, 'full', 'course', 'dept', 'teacher']
-    this.selectedType = 0
-    this.order = 'name'
-  }
-
-  parseList(frame, type) {
-    let listMap = {
-      full: { short: 0, name: 1, dept: 2, room: 3, teacher: 4 },
-      course: { short: 0, dept: 1, room: 2, teacher: 3 },
-      dept: { short: 0, name: 1, room: 2, teacher: 3 },
-      teacher: { short: 0, name: 1, dept: 2, room: 3 }
-    }
-    let listType = this.listTypes[type] || type
-    let courseCodes = []
-
-    function parseElem(elem) {
-      let obj = {}
-      let inherited = undefined
-      obj.node = elem
-      try {
-        obj.code = elem.querySelector('input[name=cod_asign]').value
-        if(!courseCodes[obj.code]){
-          inherited = false
-          obj.name = elem.querySelector('input[name=nom_asign]').value.trim()
-          courseCodes[obj.code] = {name: obj.name}
-        } else {
-          obj.name = courseCodes[obj.code].name
-          inherited = true
-        }
-        let dataNodes = elem.querySelectorAll('td')
-        let map = listMap[listType]
-        obj.short = dataNodes[0].innerText.trim()
-        if(map.hasOwnProperty('dept'))
-          obj.dept = dataNodes[map.dept].innerText.trim()
-        obj.room = dataNodes[map.room].innerText.trim()
-        if(map.hasOwnProperty('teacher')){
-          let teacherText = dataNodes[map.teacher].innerText.trim()
-            if(!teacherText.toLowerCase().match(/^(proceso interno|nn|sin información)$/)){
-              obj.teacher = teacherText
-              obj.teacherNode = dataNodes[map.teacher]
-            }
-        }
-        if(inherited === false){
-          if(map.hasOwnProperty('name'))
-            obj.nameNode = dataNodes[map.name]
-          courseCodes[obj.code] = {
-            name: courseCodes[obj.code].name,
-            dept: obj.dept,
-            short: obj.short
-          }
-        } else if(inherited === true){
-          obj.dept = courseCodes[obj.code].dept
-          obj.short = courseCodes[obj.code].short
-        }
-      } catch(ex) {
-        console.error(ex)
-        console.log({obj: obj, inherited: inherited})
-       }
-      return obj
-    }
-
-    if(!listType) return []
-
-    return Array.prototype.map.call(
-      frame.querySelectorAll('tr[valign=top]'), parseElem)
   }
 
   onListChange(callback) {
     let self = this
 
-    function setupMain(frame) {
+    function parseList(frame, type, next) {
+      let listType = self.listTypes[type] || type
+      if(!listType) next(null)
+
+      let listMap = {
+        full: { short: 0, course: 1, dept: 2, room: 3, teacher: 4 },
+        course: { short: 0, dept: 1, room: 2, teacher: 3 },
+        dept: { short: 0, course: 1, room: 2, teacher: 3 },
+        teacher: { short: 0, course: 1, dept: 2, room: 3 }
+      }
+
+      let courseCodes = []
+
+      function parseElem(elem, idx, array) {
+        let obj = {}
+        let inherited = undefined
+        obj.node = elem
+        try {
+          obj.code = elem.querySelector('input[name=cod_asign]').value
+          obj.semester = elem.querySelector('input[name=semestre]').value
+          obj.year = elem.querySelector('input[name=ano]').value
+          obj.campus = elem.querySelector('input[name=cod_sede]').value
+          let time_code = elem.querySelector('input[name=cod_jornada]').value
+          obj.daytime = time_code == 1 ? true : false
+
+          if(!courseCodes[obj.code]){
+            inherited = false
+            obj.course = elem.querySelector('input[name=nom_asign]').value.trim()
+            courseCodes[obj.code] = {course: obj.course}
+          } else {
+            obj.course = courseCodes[obj.code].course
+            inherited = true
+          }
+          let dataNodes = elem.querySelectorAll('td')
+          let map = listMap[listType]
+          obj.short = dataNodes[0].innerText.trim()
+          if(map.hasOwnProperty('dept'))
+            obj.dept = dataNodes[map.dept].innerText.trim()
+          obj.room = dataNodes[map.room].innerText.trim()
+          if(map.hasOwnProperty('teacher')){
+            let teacherText = dataNodes[map.teacher].innerText.trim()
+              if(!teacherText.toLowerCase().match(/^(proceso interno|nn|sin información)$/)){
+                obj.teacher = teacherText
+                obj.teacherNode = dataNodes[map.teacher]
+              }
+          }
+          if(inherited === false){
+            if(map.hasOwnProperty('course'))
+              obj.courseNode = dataNodes[map.course]
+            courseCodes[obj.code] = {
+              course: courseCodes[obj.code].course,
+              dept: obj.dept,
+              short: obj.short
+            }
+          } else if(inherited === true){
+            obj.dept = courseCodes[obj.code].dept
+            obj.short = courseCodes[obj.code].short
+          }
+        } catch(ex) {
+          throw new Error(`node ${idx} was nos parseable`)
+        }
+        return obj
+      }
+
+      let elements = frame.querySelectorAll('tr[valign=top]')
+
       try {
-        frame.querySelector('select[name=op]')
-        .addEventListener('change', mainListener)
-        frame.querySelector('select[name=op_asig]')
-        .addEventListener('change', orderListener)
-      } catch(ex){ throw new Error('problema configurando controles') }
+        let list = Array.prototype.map.call(elements, parseElem)
+        next(list)
+      } catch(ex) {
+        console.error(ex)
+        window.setTimeout(() => {
+          parseList(frame, type, next)
+        }, 1000)
+      }
     }
 
-    function setupSub() {
+    function setupTop(next) {
+      utils.getFrameWithDelay('frame1', 1000, (frame) => {
+        try {
+          let selectsElements = frame.querySelectorAll('select')
+          if(selectsElements.length < 3) throw new Error('not completed')
+
+          Array.prototype.map.call(selectsElements, (elem) => {
+            elem.addEventListener('change', (evt) => {
+              setupMain(next)
+              console.log('top changed')
+            })
+          })
+
+          setupMain(next)
+
+          console.log('top set')
+        } catch(ex) { throw new Error('problema configurando controles') }
+      }, 5)
+    }
+
+    function setupMain(next) {
+      utils.getFrameWithDelay('frame5', 200, (frame) => {
+        try {
+          frame.querySelector('select[name=op_asig]')
+          .addEventListener('change', orderListener)
+
+          let operation = frame.querySelector('select[name=op]')
+          operation.addEventListener('change', mainListener)
+
+          setupSub(() => {
+            next(operation.value)
+          })
+
+          console.log('main set')
+        } catch(ex){ throw new Error('problema configurando controles') }
+      }, 5)
+    }
+
+    function setupSub(next) {
       utils.getFrameWithDelay('frame6', 500, (frame) => {
         try {
           frame.querySelector('select[name=opc]')
           .addEventListener('change', subListener)
+          console.log('sub set')
         } catch(ex){ /* fail silently */ }
+        next()
       })
     }
 
     function mainListener(event) {
-      self.selectedType = event.target.selectedIndex
-      event.target.selectedIndex > 1 ? setupSub() : grabCourseList()
+      setupTop((type) => {
+        console.log(type)
+        grabCourseList(type, callback)
+      })
+      console.log('main changed')
     }
 
     function subListener(event) {
-      utils.getFrameWithDelay('frame5', 500, (frame) => {
-        setupMain(frame)
+      setupTop((type) => {
+        grabCourseList(type, callback)
       })
-      setupSub()
-      grabCourseList()
+      console.log('sub changed')
     }
 
     function orderListener(event) {
-      self.order = event.target.selectedIndex === 0 ? 'name' : 'code'
-      setupSub()
-      grabCourseList()
+      setupTop((type) => {
+        grabCourseList(type, callback)
+      })
+      console.log('order changed')
     }
 
-    function grabCourseList() {
-      utils.getFrameWithDelay('frame3', 2000, (frame) => {
-        callback(self.parseList(frame, self.selectedType))
+    function grabCourseList(type, next) {
+      utils.getFrameWithDelay('frame3', 500, (frame) => {
+        utils.onFrameReady('frame3', (frame) => {
+          parseList(frame, type, (list) => {
+            next(list)
+            console.log('list grabbed')
+          })
+        })
       })
     }
 
-    utils.getFrameWithDelay('frame5', 200, (frame) => {
-      setupMain(frame)
+    setupTop((type) => {
+      grabCourseList(type, callback)
     })
   }
 }

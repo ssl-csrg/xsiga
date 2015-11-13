@@ -1,7 +1,13 @@
-export function getFrameWithDelay(name, delay, callback) {
+export function getFrameWithDelay(name, delay, callback, retries) {
   window.setTimeout(function(){
-    var frame = window.parent.frames[name].document
-    callback(frame)
+    try {
+      var frame = window.parent.frames[name].document
+      callback(frame)
+    } catch (ex) {
+      if(retries){
+        getFrameWithDelay(name, delay, callback, --retries)
+      } else throw new Error(`done retrying for ${name}`)
+    }
   }, delay)
 }
 
