@@ -79,7 +79,6 @@ export default class HorarioAsignaturas {
         let list = Array.prototype.map.call(elements, parseElem)
         next(list)
       } catch(ex) {
-        console.error(ex)
         window.setTimeout(() => {
           parseList(frame, type, next)
         }, 1000)
@@ -95,13 +94,11 @@ export default class HorarioAsignaturas {
           Array.prototype.map.call(selectsElements, (elem) => {
             elem.addEventListener('change', (evt) => {
               setupMain(next)
-              console.log('top changed')
             })
           })
 
           setupMain(next)
 
-          console.log('top set')
         } catch(ex) { throw new Error('problema configurando controles') }
       }, 5)
     }
@@ -118,8 +115,6 @@ export default class HorarioAsignaturas {
           setupSub(() => {
             next(operation.value)
           })
-
-          console.log('main set')
         } catch(ex){ throw new Error('problema configurando controles') }
       }, 5)
     }
@@ -129,7 +124,6 @@ export default class HorarioAsignaturas {
         try {
           frame.querySelector('select[name=opc]')
           .addEventListener('change', subListener)
-          console.log('sub set')
         } catch(ex){ /* fail silently */ }
         next()
       })
@@ -137,24 +131,20 @@ export default class HorarioAsignaturas {
 
     function mainListener(event) {
       setupTop((type) => {
-        console.log(type)
         grabCourseList(type, callback)
       })
-      console.log('main changed')
     }
 
     function subListener(event) {
       setupTop((type) => {
         grabCourseList(type, callback)
       })
-      console.log('sub changed')
     }
 
     function orderListener(event) {
       setupTop((type) => {
         grabCourseList(type, callback)
       })
-      console.log('order changed')
     }
 
     function grabCourseList(type, next) {
@@ -162,7 +152,6 @@ export default class HorarioAsignaturas {
         utils.onFrameReady('frame3', (frame) => {
           parseList(frame, type, (list) => {
             next(list)
-            console.log('list grabbed')
           })
         })
       })
