@@ -30,9 +30,11 @@ export default class HorarioAsignaturas {
           obj.code = elem.querySelector('input[name=cod_asign]').value
           obj.semester = elem.querySelector('input[name=semestre]').value
           obj.year = elem.querySelector('input[name=ano]').value
-          obj.campus = elem.querySelector('input[name=cod_sede]').value
-          let time_code = elem.querySelector('input[name=cod_jornada]').value
-          obj.daytime = time_code == 1 ? true : false
+          let campusCode = elem.querySelector('input[name=cod_sede]').value
+          let timeCode = elem.querySelector('input[name=cod_jornada]').value
+
+          obj.daytime = timeCode == 1 ? true : false
+          obj.campus = self.campuses[campusCode]
 
           if(!courseCodes[obj.code]){
             inherited = false
@@ -96,6 +98,14 @@ export default class HorarioAsignaturas {
               setupMain(next)
             })
           })
+
+          if(!self.campuses){
+            self.campuses = []
+            Array.prototype.filter.call(selectsElements[2], (e) => e.value > 0)
+            .map((elem) => {
+              self.campuses[elem.value] = elem.text
+            })
+          }
 
           setupMain(next)
 
