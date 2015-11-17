@@ -1,4 +1,4 @@
-import utils from '../lib/utils'
+import * as utils from '../lib/utils'
 import siga from '../siga'
 
 var activity = siga.detectActivity()
@@ -39,6 +39,6 @@ function requestInfo(kind, elem){
     kind: kind,
     data: elem
   }, (response) => {
-    console.log(response);
+    /* nothing */
   });
 }
