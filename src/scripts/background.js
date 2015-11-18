@@ -1,14 +1,6 @@
 import * as utils from '../lib/utils'
 
 const serverHost = 'http://localhost:3000'
-let popupURL = chrome.extension.getURL('popup.html')
-
-let toQueryString = function(object) {
-    return '?' +
-    Object.keys(object).map(
-      (key) => `${encodeURIComponent(key)}=${encodeURIComponent(object[key])}`
-    ).join('&');
-}
 
 function postData(obj, kind, callback){
   let xhr = new XMLHttpRequest()

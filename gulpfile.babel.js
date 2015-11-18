@@ -47,7 +47,7 @@ gulp.task('webpack', (next) => {
 
 
 gulp.task('copy:dev', ['clean', 'icon', 'webpack', 'manifest'], () => {
-  return gulp.src(['tmp/**', 'src/icon.png', 'src/xs-style.css', 'src/popup/**/*.html'])
+  return gulp.src(['tmp/**', 'src/icon.png', 'src/xs-style.css'])
     .pipe(gulp.dest('dist/unpacked'))
 })
 

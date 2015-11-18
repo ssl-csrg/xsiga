@@ -13,6 +13,5 @@
     "css": ["xs-style.css"],
     "all_frames": true
   }],
-  "permissions": ["https://siga.usm.cl/*"],
-  "web_accessible_resources": ["popup.html", "bundle.js"]
+  "permissions": ["https://siga.usm.cl/*"]
 }
