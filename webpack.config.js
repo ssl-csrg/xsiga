@@ -1,7 +1,8 @@
 module.exports = {
   entry: {
-    content: './src/scripts/content.js',
-    background: './src/scripts/background.js'
+    'ext/content': './extension/scripts/content.js',
+    'ext/background': './extension/scripts/background.js',
+    'client/bundle': './client/src/index.js'
   },
   output: {
     path: 'tmp',
@@ -13,6 +14,10 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         loader: 'babel'
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue'
       }
     ]
   }

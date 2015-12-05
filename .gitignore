@@ -6,7 +6,7 @@ dist/*
 ignored
 
 # Archivos Compilados
-src/icon.png
+extension/icon.png
 tmp
 
 # Módulos de Node
