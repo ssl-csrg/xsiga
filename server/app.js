@@ -1,14 +1,11 @@
 import express from 'express'
-import bodyParser from 'body-parser'
-import morgan from 'morgan'
 
 import routes from './routes'
+import config from './config'
 
 let app = express()
 
-app.use(bodyParser.json())
-app.use(morgan('tiny'))
-
+config(app)
 routes(app)
 
 app.listen(3000, () => {

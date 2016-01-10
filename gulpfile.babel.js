@@ -15,17 +15,20 @@ import pkg from './package.json'
 import wpConfig from './webpack.config.js'
 
 gulp.task('clean', () => {
-  return del('dist/**/*')
+  return del(['dist', 'tmp'])
 })
 
 gulp.task('manifest', (next) => {
   for(let field of ['name', 'version', 'description']){
     mnf[field] = pkg[field]
   }
-  fs.mkdir('tmp/ext', function(err){
+  fs.mkdir('tmp', function(err){
     if(err && err.code != 'EEXIST') next(err)
-    fs.writeFile('tmp/ext/manifest.json', JSON.stringify(mnf, null, 2), () => {
-      next()
+    fs.mkdir('tmp/ext', function(err){
+      if(err && err.code != 'EEXIST') next(err)
+      fs.writeFile('tmp/ext/manifest.json', JSON.stringify(mnf, null, 2), () => {
+        next()
+      })
     })
   })
 })
@@ -52,7 +55,7 @@ gulp.task('copy:ext', ['clean', 'icon', 'webpack', 'manifest'], () => {
 })
 
 gulp.task('copy:client', ['clean', 'webpack'], () => {
-  return gulp.src(['tmp/client/**', 'client/**', '!client/src'])
+  return gulp.src(['tmp/client/**', 'client/**', '!client/src{,/**}'])
     .pipe(gulp.dest('dist/client'))
 })
 

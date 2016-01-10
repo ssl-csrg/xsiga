@@ -54,7 +54,6 @@ export default class HorarioAsignaturas {
             let teacherText = dataNodes[map.teacher].innerText.trim()
               if(!teacherText.toLowerCase().match(/^(proceso interno|nn|sin información)$/)){
                 obj.teacher = teacherText
-                obj.teacherName = utils.fixTeacherName(teacherText)
                 obj.teacherNode = dataNodes[map.teacher]
               }
           }

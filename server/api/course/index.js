@@ -8,5 +8,6 @@ router.get('/:slug', controller.show)
 router.options('/', cors())
 router.get('/', cors(), controller.index)
 router.post('/', cors(), controller.create)
+router.put('/:slug', controller.update)
 
 export default router

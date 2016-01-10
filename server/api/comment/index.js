@@ -3,7 +3,10 @@ import * as controller from './comment.controller'
 
 var router = Router()
 
-router.get('/:id', controller.list)
-router.post('/:id', controller.add)
+router.put('/:id/:reply/:vote(up|down)', controller.voteReply)
+router.put('/:id/:vote(up|down)', controller.vote)
+router.put('/:id', controller.checkSession, controller.reply)
+router.get('/:slug', controller.list)
+router.post('/:slug', controller.checkSession, controller.add)
 
 export default router
