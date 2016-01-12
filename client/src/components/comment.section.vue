@@ -80,16 +80,16 @@ export default {
     sendComment(){
       this.newComment.created = new Date()
       this.newComment.parent = this.obj.slug
-      if (this.shared.session && this.shared.session.hasOwnProperty('_id')){
+      if (this.shared.session && this.shared.session.hasOwnProperty('name')){
         this.newComment.user = this.shared.session
       }
       Comment.send(this.newComment).then((comment) => {
         this.obj.comments.unshift(comment)
-        if (!this.shared.session){
+        if (!this.shared.session || !this.shared.session.hasOwnProperty('name')){
           this.shared.session = {
             name: comment.user.name,
             email: comment.user.email,
-            _id: comment.user.id
+            _id: comment.user._id
           }
         }
       })

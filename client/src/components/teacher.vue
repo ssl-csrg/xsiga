@@ -20,18 +20,18 @@
               </div>
             </div>
           </div>
-          <div id="shareMenu" class="ui floating dropdown button">
+          <div id="shareMenu" class="ui pointing dropdown button">
             <i class="share alternate icon"></i>
             <span class="text">Compartir</span>
             <div class="menu">
-              <div class="item">
+              <a class="item" :href="facebookIntent">
                 <i class="facebook icon"></i>
                 <span class="text">Facebook</span>
-              </div>
-              <div class="item">
+              </a>
+              <a class="item" :href="twitterIntent">
                 <i class="twitter icon"></i>
                 <span class="text">Twitter</span>
-              </div>
+              </a>
             </div>
           </div>
           <button class="ui orange button" v-link="{ path: $route.path + '/edit' }">
@@ -60,12 +60,13 @@
         </h3>
         <div class="markdown" v-if="teacher.description" v-html="teacher.description | marked"></div>
         <div class="markdown" v-else>
-          <p>No se tienen más datos sobre este profesor.</p>
+          <p>No se tienen más datos sobre este profesor. Puedes agregar datos presionando el botón "Editar".</p>
         </div>
       </div>
       <div class="six wide column">
         <links v-if="hasLinks" :obj.sync="teacher" :editor="false"></links>
         <tags v-if="hasTags" :obj.sync="teacher" :editor="false"></tags>
+        <recommended :obj="teacher"></recommended>
       </div>
     </div>
     <div class="row">
@@ -80,13 +81,16 @@
 import CommentSection from './comment.section.vue'
 import TagSection from './tag.section.vue'
 import LinkSection from './link.section.vue'
+import RecommendedSection from './recommended.section.vue'
 import LikeView from './like.view.vue'
 
 import * as Teacher from '../services/teacher.service'
 import * as Comment from '../services/comment.service'
 
 import { SharedStore, sortComments } from '../lib/utils'
+
 import marked from 'marked'
+import queryString from 'query-string'
 
 export default {
   route: {
@@ -128,6 +132,22 @@ export default {
     },
     hasLinks: function(){
       return this.teacher.links && this.teacher.links.length > 0
+    },
+    twitterIntent: function(){
+      return 'https://twitter.com/intent/tweet?' + queryString.stringify({
+        text: 'Revisa la información del profesor(a) '+this.teacher.name,
+        via: 'XSIGA',
+        hashtags: 'XSIGA,UTFSM',
+        url: 'http://localhost:3000/teacher/'+this.teacher.slug
+      })
+    },
+    facebookIntent: function(){
+      return 'https://www.facebook.com/dialog/share?' + queryString.stringify({
+        app_id: 1650855531847633,
+        display: "page",
+        href: 'http://localhost:3000/teacher/'+this.teacher.slug,
+        redirect_uri: 'http://localhost:3000/teacher/'+this.teacher.slug
+      })
     }
   },
   methods: {
@@ -140,7 +160,8 @@ export default {
     comments: CommentSection,
     tags: TagSection,
     links: LinkSection,
-    like: LikeView
+    like: LikeView,
+    recommended: RecommendedSection
   },
   filters: {
     marked: marked

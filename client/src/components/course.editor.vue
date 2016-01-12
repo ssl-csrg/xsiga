@@ -66,9 +66,17 @@ import LinkSection from './link.section.vue'
 import marked from 'marked'
 import { shortenURL, SharedStore } from '../lib/utils'
 import * as Course from '../services/course.service'
+import * as User from '../services/user.service'
 
 export default {
   route:{
+    data(transition) {
+      return User.getTags().then((response) => {
+        return {
+          autocomplete: response.tags
+        }
+      })
+    },
     canActivate: function(transition) {
       if(SharedStore.state.course == null){
         transition.redirect('course/'+transition.to.params.slug)
@@ -76,7 +84,17 @@ export default {
     }
   },
   ready: function() {
-    $('#inputTags').tokenfield()
+    let engine = new Bloodhound({
+      local: this.autocomplete,
+      datumTokenizer: Bloodhound.tokenizers.whitespace,
+      queryTokenizer: Bloodhound.tokenizers.whitespace
+    })
+
+    engine.initialize()
+
+    $('#inputTags').tokenfield({
+      typeahead: [null, {source: engine.ttAdapter()}]
+    })
   },
   data: function(){
     let course = SharedStore.state.course
@@ -90,7 +108,8 @@ export default {
         links: course.links || [],
         tags: course.tags || []
       },
-      teachers: course.teachers
+      teachers: course.teachers,
+      autocomplete: []
     }
   },
   methods: {

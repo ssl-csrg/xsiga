@@ -155,12 +155,12 @@ export default {
     },
     sendReply(){
       this.newReply.created = new Date()
-      if (this.shared.session && this.shared.session.hasOwnProperty('_id')){
+      if (this.shared.session && this.shared.session.hasOwnProperty('name')){
         this.newReply.user = this.shared.session
       }
       Comment.reply(this.newReply, this.comment._id).then((comment) => {
         this.comment.replies = comment.replies
-        if (!this.shared.session){
+        if (!this.shared.session || !this.shared.session.hasOwnProperty('name')){
           User.get().then((user) => {
             this.shared.session = user
           })

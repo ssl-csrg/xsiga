@@ -7,6 +7,8 @@ import Teacher from './components/teacher.vue'
 import TeacherEditor from './components/teacher.editor.vue'
 import BaseComponent from './components/base.vue'
 import NotFound from './components/notfound.vue'
+import List from './components/list.vue'
+import Index from './components/index.vue'
 
 import moment from 'moment'
 
@@ -48,6 +50,14 @@ router.map({
         component: Course
       }
     }
+  },
+  '/:kind': {
+    name: 'list',
+    component: List
+  },
+  '/': {
+    name: 'index',
+    component: Index
   },
   '*': {
     component: NotFound

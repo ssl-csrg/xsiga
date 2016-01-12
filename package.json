@@ -53,6 +53,7 @@
     "moment": "^2.10.6",
     "mongojs": "^1.4.1",
     "morgan": "^1.6.1",
+    "query-string": "^3.0.0",
     "querystring": "^0.2.0",
     "request": "^2.67.0",
     "serve-favicon": "^2.3.0",

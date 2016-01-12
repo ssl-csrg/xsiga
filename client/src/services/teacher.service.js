@@ -1,5 +1,9 @@
 import { getJSON, putJSON } from '../lib/utils'
 
+export function list() {
+  return getJSON('/api/teachers')
+}
+
 export function findBySlug(slug) {
   return getJSON('/api/teachers/'+slug)
 }

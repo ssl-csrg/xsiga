@@ -50,6 +50,46 @@ function addCIMELink(doc) {
   })
 }
 
+function getRelated(courseDoc) {
+  let teacherSlugs = courseDoc.teachers.map(x => x.slug)
+  function jaccard(a, b) {
+    let intersect = a.filter(x => b.indexOf(x) > -1).length
+    return Number(intersect/(a.length + b.length - intersect))
+  }
+
+  function getProximity(elem){
+    let hisTags = elem.tags
+    let hisTeacherSlugs = elem.teachers.map(x => x.slug)
+    let close = jaccard(courseDoc.tags, hisTags) + jaccard(teacherSlugs, hisTeacherSlugs)
+
+    return {
+      name: elem.name,
+      slug: elem.slug,
+      close: close
+    }
+  }
+
+  function getOtherCourses() {
+    return new Promise((resolve, reject) => {
+      db.course.find({
+        _id: { $ne: courseDoc._id }
+      }, {
+        tags: 1, teachers: 1, name: 1, slug: 1
+      }, (err, courses) => {
+        if (err) reject(err)
+        resolve(courses)
+      })
+    })
+  }
+
+  return getOtherCourses().then((courses) => {
+    return courses.map(getProximity)
+      .filter(x => x.close > 0)
+      .sort((a, b) => b.close - a.close)
+      .slice(0, 3)
+  })
+}
+
 export function index(req, res, next) {
   db.course.find({}, {name: 1, slug: 1}).sort({short: 1}, (err, docs) => {
     if (err) return next(err)
@@ -62,7 +102,10 @@ export function show(req, res, next) {
   db.course.findOne({slug: slug}, (err, doc) => {
     if (err) return next(err)
     if (!doc) return res.sendStatus(404)
-    res.json(doc)
+    getRelated(doc).then((related) => {
+      doc.related = related
+      res.json(doc)
+    })
   })
 }
 
