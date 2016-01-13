@@ -45,6 +45,7 @@
 
 <script lang="babel">
 import { shortenURL } from '../lib/utils'
+
 export default {
   props: {
     obj: {
@@ -57,7 +58,7 @@ export default {
       default: false
     }
   },
-  data(){
+  data() {
     return {
       newLink: {
         title: "",
@@ -66,14 +67,14 @@ export default {
     }
   },
   methods: {
-    addLink: function() {
-      if(this.newLink.title != "" && this.newLink.address != ""){
+    addLink() {
+      if (this.newLink.title != "" && this.newLink.address != ""){
         this.obj.links.push({title: this.newLink.title, address: this.newLink.address})
         this.newLink.title = ""
         this.newLink.address = ""
       }
     },
-    deleteLink: function(index) {
+    deleteLink(index) {
       this.obj.links.splice(index, 1)
     }
   },

@@ -121,19 +121,19 @@ export default {
         show: 100,
         hide: 300
       },
-      onVisible: function(){
+      onVisible() {
         $('#emailField').val(this.teacher.email)
       }.bind(this)
     })
   },
   computed: {
-    hasTags: function(){
+    hasTags() {
       return this.teacher.tags && this.teacher.tags.length > 0
     },
-    hasLinks: function(){
+    hasLinks() {
       return this.teacher.links && this.teacher.links.length > 0
     },
-    twitterIntent: function(){
+    twitterIntent() {
       return 'https://twitter.com/intent/tweet?' + queryString.stringify({
         text: 'Revisa la información del profesor(a) '+this.teacher.name,
         via: 'XSIGA',
@@ -141,7 +141,7 @@ export default {
         url: 'http://localhost:3000/teacher/'+this.teacher.slug
       })
     },
-    facebookIntent: function(){
+    facebookIntent() {
       return 'https://www.facebook.com/dialog/share?' + queryString.stringify({
         app_id: 1650855531847633,
         display: "page",
@@ -151,7 +151,7 @@ export default {
     }
   },
   methods: {
-    copyEmail: function(){
+    copyEmail() {
       $('#emailField').val(this.teacher.email).select()
       document.execCommand('copy')
     }

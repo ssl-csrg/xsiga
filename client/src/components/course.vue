@@ -91,19 +91,19 @@ export default {
     }
   },
   data: () => ({course:{}}),
-  ready: function() {
+  ready() {
     $('#shareMenu').dropdown({
       action: 'hide'
     })
   },
   computed: {
-    hasTags: function(){
+    hasTags() {
       return this.course.tags && this.course.tags.length > 0
     },
-    hasLinks: function(){
+    hasLinks() {
       return this.course.links && this.course.links.length > 0
     },
-    twitterIntent: function(){
+    twitterIntent() {
       return 'https://twitter.com/intent/tweet?' + queryString.stringify({
         text: 'Revisa la información del curso '+this.course.name,
         via: 'XSIGA',
@@ -111,7 +111,7 @@ export default {
         url: 'http://localhost:3000/course/'+this.course.slug
       })
     },
-    facebookIntent: function(){
+    facebookIntent() {
       return 'https://www.facebook.com/dialog/share?' + queryString.stringify({
         app_id: 1650855531847633,
         display: "page",

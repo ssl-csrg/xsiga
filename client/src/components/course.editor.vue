@@ -77,13 +77,13 @@ export default {
         }
       })
     },
-    canActivate: function(transition) {
+    canActivate(transition) {
       if(SharedStore.state.course == null){
         transition.redirect('course/'+transition.to.params.slug)
       } else transition.next()
     }
   },
-  ready: function() {
+  ready() {
     let engine = new Bloodhound({
       local: this.autocomplete,
       datumTokenizer: Bloodhound.tokenizers.whitespace,
@@ -96,7 +96,7 @@ export default {
       typeahead: [null, {source: engine.ttAdapter()}]
     })
   },
-  data: function(){
+  data() {
     let course = SharedStore.state.course
     document.title = 'XSIGA - Editando \"'+course.name+'\"'
 
@@ -113,10 +113,10 @@ export default {
     }
   },
   methods: {
-    goBack: function() {
+    goBack() {
       this.$route.router.go({ name: 'course', params: { slug: this.$route.params.slug }})
     },
-    save: function() {
+    save() {
       Course.update(this.course)
       .then(() => {
         this.$route.router.go({ name: 'course', params: { slug: this.$route.params.slug }})

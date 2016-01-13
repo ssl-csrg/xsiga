@@ -1,32 +1,28 @@
-export function getJSON(url){
-  return new Promise((resolve, reject) => {
-    let xhr = new XMLHttpRequest()
-    xhr.open('GET', url)
-    xhr.setRequestHeader('Content-type', 'application/json')
-    xhr.onload = () => {
-      if(xhr.status == 200) resolve(JSON.parse(xhr.response))
-      else reject(Error(xhr.statusText))
-    }
-    xhr.onerror = () => {
-      reject(Error('Network Error'))
-    }
-    xhr.send()
-  })
+function createJSONXHR(method, url, resolve, reject) {
+  let xhr = new XMLHttpRequest()
+  xhr.open(method, url)
+  xhr.setRequestHeader('Content-type', 'application/json')
+  xhr.onload = () => {
+    if (xhr.status == 200) resolve(JSON.parse(xhr.response))
+    else reject(Error(xhr.statusText))
+  }
+  xhr.onerror = () => {
+    reject(Error('Network Error'))
+  }
+  return xhr
 }
 
 function sendJSON(method, url, obj){
   return new Promise((resolve, reject) => {
-    let xhr = new XMLHttpRequest()
-    xhr.open(method, url)
-    xhr.setRequestHeader('Content-type', 'application/json')
-    xhr.onload = () => {
-      if(xhr.status == 200) resolve(JSON.parse(xhr.response))
-      else reject(Error(xhr.statusText))
-    }
-    xhr.onerror = () => {
-      reject(Error('Network Error'))
-    }
+    let xhr = createJSONXHR(method, url, resolve, reject)
     xhr.send(JSON.stringify(obj))
+  })
+}
+
+export function getJSON(url){
+  return new Promise((resolve, reject) => {
+    let xhr = createJSONXHR('GET', url, resolve, reject)
+    xhr.send()
   })
 }
 
@@ -46,7 +42,7 @@ export function shortenURL(value){
 export function sortComments(comments) {
   //los comentarios están ya ordenados, pero hay que ordenar las replies
   return comments.map((elem) => {
-    if(elem.replies.length > 1){
+    if (elem.replies.length > 1) {
       elem.replies.sort((a, b) => b.score - a.score)
     }
     return elem

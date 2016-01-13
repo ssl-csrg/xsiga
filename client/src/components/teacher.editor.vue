@@ -83,13 +83,13 @@ export default {
         }
       })
     },
-    canActivate: function(transition) {
-      if(SharedStore.state.teacher == null){
+    canActivate(transition) {
+      if (SharedStore.state.teacher == null) {
         transition.redirect('teacher/'+transition.to.params.slug)
       } else transition.next()
     }
   },
-  ready: function() {
+  ready() {
     let engine = new Bloodhound({
       local: this.autocomplete,
       datumTokenizer: Bloodhound.tokenizers.whitespace,
@@ -102,8 +102,8 @@ export default {
       typeahead: [null, {source: engine.ttAdapter()}]
     })
   },
-  data: function(){
-    let teacher = SharedStore.state.teacher || { name: "", description: "" }
+  data() {
+    let teacher = SharedStore.state.teacher || { name: '', description: '' }
     document.title = 'XSIGA - Editando \"'+teacher.name+'\"'
 
     return {
@@ -120,12 +120,11 @@ export default {
     }
   },
   methods: {
-    goBack: function() {
+    goBack() {
       this.$route.router.go({ name: 'teacher', params: { slug: this.$route.params.slug }})
     },
-    save: function() {
-      Teacher.update(this.teacher)
-      .then(() => {
+    save() {
+      Teacher.update(this.teacher).then(() => {
         this.$route.router.go({ name: 'teacher', params: { slug: this.$route.params.slug }})
       })
     }

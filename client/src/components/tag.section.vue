@@ -29,12 +29,11 @@ export default {
   },
   computed: {
     tags: {
-      get: function(){
+      get() {
         return this.obj.tags.join(',')
       },
-      set: function(value){
-        if(value.trim().length > 0)
-          this.obj.tags = value.split(',')
+      set(value) {
+        if (value.trim().length > 0) this.obj.tags = value.split(',')
         else this.obj.tags = []
       }
     }

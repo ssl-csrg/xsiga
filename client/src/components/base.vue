@@ -4,11 +4,12 @@
 
 <script lang="babel">
 import * as User from '../services/user.service'
+
 import { SharedStore } from '../lib/utils'
 
 export default {
   route: {
-    activate(){
+    activate() {
       return User.get().then((user) => {
         SharedStore.state.session = user
       }).catch(() => {

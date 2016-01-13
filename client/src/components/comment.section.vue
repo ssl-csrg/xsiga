@@ -41,6 +41,7 @@
 
 <script lang="babel">
 import { SharedStore } from '../lib/utils'
+
 import VueGravatar from './gravatar.vue'
 import CommentView from './comment.view.vue'
 
@@ -54,7 +55,7 @@ export default {
       required: true
     }
   },
-  data(){
+  data() {
     return {
       newComment: {
         user: {
@@ -67,25 +68,25 @@ export default {
     }
   },
   computed: {
-    hasSession(){
+    hasSession() {
       return this.shared.session && this.shared.session.hasOwnProperty('name')
     }
   },
   events: {
-    'form-open': function(id){
+    'form-open': function (id) {
       this.$broadcast('form-open', id)
     }
   },
   methods: {
-    sendComment(){
+    sendComment() {
       this.newComment.created = new Date()
       this.newComment.parent = this.obj.slug
-      if (this.shared.session && this.shared.session.hasOwnProperty('name')){
+      if (this.shared.session && this.shared.session.hasOwnProperty('name')) {
         this.newComment.user = this.shared.session
       }
       Comment.send(this.newComment).then((comment) => {
         this.obj.comments.unshift(comment)
-        if (!this.shared.session || !this.shared.session.hasOwnProperty('name')){
+        if (!this.shared.session || !this.shared.session.hasOwnProperty('name')) {
           this.shared.session = {
             name: comment.user.name,
             email: comment.user.email,
@@ -93,7 +94,7 @@ export default {
           }
         }
       })
-      this.newComment.content = ""
+      this.newComment.content = ''
     }
   },
   components: {

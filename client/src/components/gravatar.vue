@@ -21,7 +21,7 @@ export default {
     default: { type: String, default: "retro" }
   },
   computed: {
-    source(){
+    source() {
       let baseURL = this.https ? "https://secure.gravatar.com/avatar/" : 'http://www.gravatar.com/avatar/'
       let query = querystring.stringify({
         s: isRetina ? this.size * 2 : this.size,
@@ -30,7 +30,7 @@ export default {
       })
 
       let hash = this.md5 ? this.md5 : this.email ? md5(this.email) : false
-      if(!hash){
+      if (!hash) {
         console.warn('you need to provide either email or md5 hash to retrieve the gravatar')
         return ""
       }

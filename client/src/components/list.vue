@@ -23,13 +23,13 @@ export default {
   route: {
     data({to: { params: { kind } }, redirect }) {
       console.log(kind)
-      if(kind == 'teacher'){
+      if (kind == 'teacher') {
         return Teacher.list().then((content) => ({
           contentName: 'Profesores',
           contentType: 'teacher',
           content: content
         }))
-      } else if (kind == 'course'){
+      } else if (kind == 'course') {
         return Course.list().then((content) => ({
           contentName: 'Asignaturas',
           contentType: 'course',

@@ -66,10 +66,13 @@
 </style>
 
 <script lang="babel">
+import moment from 'moment'
+
 import VueGravatar from './gravatar.vue'
 import ReplyView from './reply.view.vue'
-import moment from 'moment'
+
 import { SharedStore } from '../lib/utils'
+
 import * as Comment from '../services/comment.service'
 import * as User from '../services/user.service'
 
@@ -81,48 +84,48 @@ export default {
       required: true
     }
   },
-  data(){
+  data() {
     return {
       formShown: false,
       newReply: {
         user: {
-          name: "",
-          email: ""
+          name: '',
+          email: ''
         },
-        content: ""
+        content: ''
       },
       shared: SharedStore.state
     }
   },
   events: {
-    'form-open': function(id){
+    'form-open': function (id) {
       if(id != this.comment._id) this.formShown = false
     }
   },
   computed: {
-    isPositive(){
-      if(!this.shared.session) return false
-      if(!this.comment.positives) this.comment.positives = []
+    isPositive() {
+      if (!this.shared.session) return false
+      if (!this.comment.positives) this.comment.positives = []
       return this.comment.positives.indexOf(this.shared.session._id) > -1
     },
-    isNegative(){
-      if(!this.shared.session) return false
-      if(!this.comment.negatives) this.comment.negatives = []
+    isNegative() {
+      if (!this.shared.session) return false
+      if (!this.comment.negatives) this.comment.negatives = []
       return this.comment.negatives.indexOf(this.shared.session._id) > -1
     },
-    hasSession(){
+    hasSession() {
       return this.shared.session != null
     }
   },
   methods: {
-    showForm(){
+    showForm() {
       this.formShown = true
       this.$dispatch('form-open', this.comment._id)
     },
-    closeForm(){
+    closeForm() {
       this.formShown = false
     },
-    castVote(cast){
+    castVote(cast) {
       const sessId = this.shared.session._id
       Comment.vote(cast, this.comment._id).then((result) => {
         if(!this.comment.positives) this.comment.positives = []
@@ -131,9 +134,9 @@ export default {
         let positiveIdx = this.comment.positives.indexOf(sessId)
         let negativeIdx = this.comment.negatives.indexOf(sessId)
 
-        if (positiveIdx > -1){
+        if (positiveIdx > -1) {
           this.comment.positives.splice(positiveIdx, 1)
-          if(cast === 'up') {
+          if (cast === 'up') {
             this.comment.score -= 1
           } else {
             this.comment.negatives.push(sessId)
@@ -141,7 +144,7 @@ export default {
           }
         } else if (negativeIdx > -1) {
           this.comment.negatives.splice(negativeIdx, 1)
-          if(cast === 'down') {
+          if (cast === 'down') {
             this.comment.score += 1
           } else {
             this.comment.positives.push(sessId)
@@ -155,23 +158,23 @@ export default {
     },
     sendReply(){
       this.newReply.created = new Date()
-      if (this.shared.session && this.shared.session.hasOwnProperty('name')){
+      if (this.shared.session && this.shared.session.hasOwnProperty('name')) {
         this.newReply.user = this.shared.session
       }
       Comment.reply(this.newReply, this.comment._id).then((comment) => {
         this.comment.replies = comment.replies
-        if (!this.shared.session || !this.shared.session.hasOwnProperty('name')){
+        if (!this.shared.session || !this.shared.session.hasOwnProperty('name')) {
           User.get().then((user) => {
             this.shared.session = user
           })
         }
       })
-      this.newReply.content = ""
+      this.newReply.content = ''
       this.formShown = false
     }
   },
   filters: {
-    moment: function(value) {
+    moment(value) {
       return moment(value).fromNow()
     }
   },

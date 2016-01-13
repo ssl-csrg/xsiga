@@ -47,25 +47,25 @@ export default {
       required: true
     }
   },
-  data(){
+  data() {
     return {
       shared: SharedStore.state
     }
   },
   computed: {
-    isPositive(){
+    isPositive() {
       if(!this.shared.session) return false
       if(!this.reply.positives) this.reply.positives = []
       return this.reply.positives.indexOf(this.shared.session._id) > -1
     },
-    isNegative(){
+    isNegative() {
       if(!this.shared.session) return false
       if(!this.reply.negatives) this.reply.negatives = []
       return this.reply.negatives.indexOf(this.shared.session._id) > -1
     }
   },
   methods: {
-    castVote(cast){
+    castVote(cast) {
       const sessId = this.shared.session._id
       Comment.voteReply(cast, this.commentId, this.reply._id).then((result) => {
         if(!this.reply.positives) this.reply.positives = []
@@ -74,9 +74,9 @@ export default {
         let positiveIdx = this.reply.positives.indexOf(sessId)
         let negativeIdx = this.reply.negatives.indexOf(sessId)
 
-        if (positiveIdx > -1){
+        if (positiveIdx > -1) {
           this.reply.positives.splice(positiveIdx, 1)
-          if(cast === 'up') {
+          if (cast === 'up') {
             this.reply.score -= 1
           } else {
             this.reply.negatives.push(sessId)
@@ -84,7 +84,7 @@ export default {
           }
         } else if (negativeIdx > -1) {
           this.reply.negatives.splice(negativeIdx, 1)
-          if(cast === 'down') {
+          if (cast === 'down') {
             this.reply.score += 1
           } else {
             this.reply.positives.push(sessId)
@@ -101,7 +101,7 @@ export default {
     gravatar: VueGravatar
   },
   filters: {
-    moment: function(value) {
+    moment(value) {
       return moment(value).fromNow()
     }
   },

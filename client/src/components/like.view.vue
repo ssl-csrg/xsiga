@@ -20,13 +20,13 @@ export default {
       required: true
     }
   },
-  data(){
+  data() {
     return {
       shared: SharedStore.state
     }
   },
   methods: {
-    toggleLike(){
+    toggleLike() {
       if (this.isMarked) {
         Teacher.dislike(this.obj.slug).then((value) => {
           this.obj.likes.splice(this.obj.likes.indexOf(this.shared.session._id), 1)
@@ -40,7 +40,7 @@ export default {
     }
   },
   computed: {
-    isMarked(){
+    isMarked() {
       if (!this.obj.likes) this.obj.likes = []
       return this.shared.session && this.obj.likes.indexOf(this.shared.session._id) > -1
     }
